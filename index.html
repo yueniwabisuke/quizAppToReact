@@ -38,14 +38,28 @@
             }
 
             function ChoicesForm(props){
-                
-                return(
-                    <div>
-                        <ul id="choices">
-                            kkk
-                        </ul>
-                    </div>
+                const list = props.quizSet[props.currentNum].c.map((choice, index) =>
+                     <li key={index}>{choice}</li>
                 );
+                return(
+                    <ul id="choices">{list}</ul>
+                );
+
+                /*  汚い書き方
+                return(
+                    <ul id="choices">
+                        <li>
+                            {props.quizSet[props.currentNum].c[0]}
+                        </li>
+                        <li>
+                            {props.quizSet[props.currentNum].c[1]}
+                        </li>
+                        <li>
+                            {props.quizSet[props.currentNum].c[2]}
+                        </li>
+                    </ul>
+                );
+                */
             }
 
             function InputButton(){
@@ -80,8 +94,8 @@
                                 currentNum = {this.state.currentNum}
                             />
                             <ChoicesForm
-                                 quizSet = {this.state.quizSet}
-                                 currentNum = {this.state.currentNum}
+                                quizSet = {this.state.quizSet}
+                                currentNum = {this.state.currentNum}
                             />
 
                             <InputButton/>

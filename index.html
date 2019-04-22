@@ -13,12 +13,37 @@
     <script type='text/babel'>
         (() => {
 
-            function InputTextForm(){
+            //const quizSet = [ '世界で一番大きな湖は？', '2の8乗は？', 'いま、何問目？'];
+            //const setChoices = [['カスピ海', 'カリブ海', '琵琶湖'],
+            //                    ['256', '64', '1024'],
+            //                    ['3問目', '4問目', '5問目']
+            //                    ];
+            
+            const quizSet = [
+                {q: '世界で一番大きな湖は？', c: ['カスピ海', 'カリブ海', '琵琶湖']},
+                {q: '2の8乗は？', c: ['256', '64', '1024']},
+                {q: 'いま、何問目？', c: ['3問目', '4問目', '5問目']},
+            ];
+            let currentNum = 0;
+
+
+            function QuestionForm(props){
                 return(
                     <div>
-                        <p id="question"></p>
-                        <ul id="choices">kkkk</ul>
-                    
+                        <p id="question">
+                            {props.quizSet[props.currentNum].q}
+                        </p>
+                    </div>
+                );
+            }
+
+            function ChoicesForm(props){
+                
+                return(
+                    <div>
+                        <ul id="choices">
+                            kkk
+                        </ul>
                     </div>
                 );
             }
@@ -40,18 +65,24 @@
             class App extends React.Component{
                 constructor(){
                     super();
-                    
+                    this.state = {
+                        quizSet : quizSet,
+                        currentNum : currentNum,
+                    }
+                   
                 }
 
                 render(){
                     return(
                         <div className="container">
-                            世界で一番大きな湖は？
-                            <InputTextForm
-                            
+                            <QuestionForm
+                                quizSet = {this.state.quizSet}
+                                currentNum = {this.state.currentNum}
                             />
-                            <InputTextForm/>
-                            <InputTextForm/>
+                            <ChoicesForm
+                                 quizSet = {this.state.quizSet}
+                                 currentNum = {this.state.currentNum}
+                            />
 
                             <InputButton/>
                         </div>

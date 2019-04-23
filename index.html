@@ -25,7 +25,8 @@
                 {q: 'いま、何問目？', c: ['3問目', '4問目', '5問目']},
             ];
             let currentNum = 0;
-
+            let isAnswered;
+            let score = 0;
 
             function QuestionForm(props){
                 return(
@@ -39,7 +40,11 @@
 
             function ChoicesForm(props){
                 const list = props.quizSet[props.currentNum].c.map((choice, index) =>
-                     <li key={index}>{choice}</li>
+                     <li key={index} id={index} onClick = {() => 
+                        props.checkAnswer(props, choice, {index})
+                     }>
+                        {choice}
+                    </li>
                 );
                 return(
                     <ul id="choices">{list}</ul>
@@ -62,10 +67,14 @@
                 */
             }
 
-            function InputButton(){
+            function SubmitButton(props){
                 return(
                     <div>
-                        <div id="btn" className="disabled">Next</div>
+                        <div id="btn" className="disabled" onClick={() => 
+                                props.toNextQuestion(props.currentNum)
+                                
+                            }>Next
+                        </div>
                         <section id="result">
                             <p></p>
                             <a href="">Replay?</a>
@@ -82,8 +91,40 @@
                     this.state = {
                         quizSet : quizSet,
                         currentNum : currentNum,
+                        isAnswered : isAnswered
                     }
-                   
+                    this.checkAnswer = this.checkAnswer.bind(this);
+                    this.toNextQuestion = this.toNextQuestion.bind(this);
+
+                }
+
+                toNextQuestion(currentNum){
+                    this.setState = (prevState => {
+                        return{
+                            currentNum: prevState.currentNum + 1
+                        };
+                    });
+                    
+                }
+
+                checkAnswer(props, choice, index){
+
+                    if (props.isAnswered) {
+                        return;
+                    }
+                    this.setState({
+                        isAnswered: true
+                    });
+                    const li = document.getElementById(index["index"]);
+
+                    if (choice === props.quizSet[props.currentNum].c[0]) {
+                        li.classList.add('correct');
+                        score++;
+                    } else {
+                        li.classList.add('wrong');
+                    }
+
+                    btn.classList.remove('disabled');
                 }
 
                 render(){
@@ -96,9 +137,14 @@
                             <ChoicesForm
                                 quizSet = {this.state.quizSet}
                                 currentNum = {this.state.currentNum}
+                                checkAnswer = {this.checkAnswer}
+                                isAnswered = {this.isAnswered}　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　
                             />
 
-                            <InputButton/>
+                            <SubmitButton
+                                currentNum = {this.state.currentNum}
+                                toNextQuestion = {this.toNextQuestion}
+                            />
                         </div>
                     );
                 }

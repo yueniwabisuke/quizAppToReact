@@ -24,9 +24,7 @@
                 {q: '2の8乗は？', c: ['256', '64', '1024']},
                 {q: 'いま、何問目？', c: ['3問目', '4問目', '5問目']},
             ];
-            let currentNum = 0;
-            let isAnswered;
-            let score = 0;
+            
 
             function QuestionForm(props){
                 return(
@@ -71,7 +69,7 @@
                 return(
                     <div>
                         <div id="btn" className="disabled" onClick={() => 
-                                props.toNextQuestion(props.currentNum)
+                                props.toNextQuestion()
                                 
                             }>Next
                         </div>
@@ -90,16 +88,17 @@
                     super();
                     this.state = {
                         quizSet : quizSet,
-                        currentNum : currentNum,
-                        isAnswered : isAnswered
+                        currentNum : 0,
+                        isAnswered : 0,
+                        score : 0
                     }
                     this.checkAnswer = this.checkAnswer.bind(this);
                     this.toNextQuestion = this.toNextQuestion.bind(this);
 
                 }
 
-                toNextQuestion(currentNum){
-                    this.setState = (prevState => {
+                toNextQuestion(){
+                    this.setState(prevState => {
                         return{
                             currentNum: prevState.currentNum + 1
                         };
@@ -119,7 +118,7 @@
 
                     if (choice === props.quizSet[props.currentNum].c[0]) {
                         li.classList.add('correct');
-                        score++;
+                        //score++;
                     } else {
                         li.classList.add('wrong');
                     }
@@ -137,8 +136,9 @@
                             <ChoicesForm
                                 quizSet = {this.state.quizSet}
                                 currentNum = {this.state.currentNum}
+                                score = {this.state.score}　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　
                                 checkAnswer = {this.checkAnswer}
-                                isAnswered = {this.isAnswered}　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　
+                                isAnswered = {this.isAnswered}
                             />
 
                             <SubmitButton

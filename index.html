@@ -37,9 +37,9 @@
             }
 
             function ChoicesForm(props){
-                const list = props.quizSet[props.currentNum].c.map((choice, index) =>
-                     <li key={index} id={index} onClick = {() => 
-                        props.checkAnswer(props, choice, {index})
+                const list = props.quizSet[props.currentNum].c.map((choice, choicesId) =>
+                     <li key={choicesId} id={choicesId} onClick = {() => 
+                        props.checkAnswer(props, choice, choicesId)
                      }>
                         {choice}
                     </li>
@@ -69,7 +69,7 @@
                 return(
                     <div>
                         <div id="btn" className="disabled" onClick={() => 
-                                props.toNextQuestion()
+                                props.toNextQuestion(props.isAnswered)
                                 
                             }>Next
                         </div>
@@ -90,40 +90,50 @@
                         quizSet : quizSet,
                         currentNum : 0,
                         isAnswered : 0,
-                        score : 0
+                        score : 0,
+                        choicesId : 0
                     }
                     this.checkAnswer = this.checkAnswer.bind(this);
                     this.toNextQuestion = this.toNextQuestion.bind(this);
 
                 }
 
-                toNextQuestion(){
+                checkAnswer(props, choice, choicesId){
+                    this.setState({
+                        isAnswered: choicesId
+                    });
+                    const li = document.getElementById(choicesId);
+                    const btn = document.getElementById('btn');
+
+                    if (choice === props.quizSet[props.currentNum].c[0]) {
+                        li.classList.add('correct');
+                        this.setState(prevState => {
+                            return{
+                                score: prevState.score + 1
+                            };
+                            
+                        });
+                    } else {
+                        li.classList.add('wrong');
+                    }
+                    console.log(props.score);
+                    btn.classList.remove('disabled');
+                }
+
+                toNextQuestion(isAnswered){
+                    const li = document.getElementById(isAnswered);
+                    const btn = document.getElementById('btn');
+
+                    li.classList.remove('correct');
+                    li.classList.remove('wrong');
+                    btn.classList.add('disabled');
+
                     this.setState(prevState => {
                         return{
                             currentNum: prevState.currentNum + 1
                         };
                     });
                     
-                }
-
-                checkAnswer(props, choice, index){
-
-                    if (props.isAnswered) {
-                        return;
-                    }
-                    this.setState({
-                        isAnswered: true
-                    });
-                    const li = document.getElementById(index["index"]);
-
-                    if (choice === props.quizSet[props.currentNum].c[0]) {
-                        li.classList.add('correct');
-                        //score++;
-                    } else {
-                        li.classList.add('wrong');
-                    }
-
-                    btn.classList.remove('disabled');
                 }
 
                 render(){
@@ -136,14 +146,17 @@
                             <ChoicesForm
                                 quizSet = {this.state.quizSet}
                                 currentNum = {this.state.currentNum}
-                                score = {this.state.score}　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　
+                                score = {this.state.score}　　
+                                isAnswered = {this.state.isAnswered}　　　　　　　　　　　　　　　　　　　　　　
                                 checkAnswer = {this.checkAnswer}
-                                isAnswered = {this.isAnswered}
+                                
                             />
 
                             <SubmitButton
                                 currentNum = {this.state.currentNum}
+                                isAnswered = {this.state.isAnswered}
                                 toNextQuestion = {this.toNextQuestion}
+                                
                             />
                         </div>
                     );
